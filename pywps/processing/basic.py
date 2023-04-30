@@ -3,7 +3,7 @@
 # licensed under MIT, Please consult LICENSE.txt for details     #
 ##################################################################
 import os
-
+import threading, multiprocessing
 from pywps.processing.job import Job
 
 
@@ -29,7 +29,7 @@ class MultiProcessing(Processing):
     """
 
     def start(self):
-        import multiprocessing
+        #import multiprocessing
         process = multiprocessing.Process(
             target=getattr(self.job.process, self.job.method),
             args=(self.job.wps_request, self.job.wps_response)
@@ -64,3 +64,29 @@ class DetachProcessing(Processing):
             pass
         # Ensure to stop ourself here what ever append.
         os._exit(0)
+
+
+class k8sProcessing(Processing):
+    """
+    :class:`k8sProcessing` run job as detached process. 
+    The process will be run as child of pid 1
+    """
+    
+    def start(self):
+        
+        wps_request = self.job.wps_request
+        wps_response = self.job.wps_response
+
+        # intercept the request and print the inputs
+        for input in wps_request.inputs:
+            print(input)
+
+
+        # process = threading.Thread(
+        #     target=getattr(self.job.process, self.job.method),
+        #     args=(wps_request, wps_response)
+        # )
+        # process.start()
+
+
+

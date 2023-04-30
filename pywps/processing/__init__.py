@@ -4,7 +4,7 @@
 ##################################################################
 
 import pywps.configuration as config
-from pywps.processing.basic import MultiProcessing, DetachProcessing
+from pywps.processing.basic import MultiProcessing, DetachProcessing, k8sProcessing
 from pywps.processing.scheduler import Scheduler
 # api only
 from pywps.processing.basic import Processing  # noqa: F401
@@ -16,6 +16,7 @@ LOGGER = logging.getLogger("PYWPS")
 MULTIPROCESSING = 'multiprocessing'
 DETACHPROCESSING = 'detachprocessing'
 SCHEDULER = 'scheduler'
+KUBERNETES = 'kubernetes'
 DEFAULT = MULTIPROCESSING
 
 
@@ -32,7 +33,11 @@ def Process(process, wps_request, wps_response):
         process = Scheduler(process, wps_request, wps_response)
     elif mode == DETACHPROCESSING:
         process = DetachProcessing(process, wps_request, wps_response)
-    else:
+    elif process == DEFAULT:
         process = MultiProcessing(process, wps_request, wps_response)
+    elif mode == MULTIPROCESSING:
+        process = MultiProcessing(process, wps_request, wps_response)   
+    elif mode == KUBERNETES:
+        process = k8sProcessing(process, wps_request, wps_response)
 
     return process
