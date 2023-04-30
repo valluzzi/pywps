@@ -20,3 +20,5 @@ docs/_build
 *.orig
 .coverage
 .pytest_cache
+
+venv
