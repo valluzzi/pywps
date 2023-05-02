@@ -48,6 +48,8 @@ class Service(object):
 
         if cfgfiles:
             config.load_configuration(cfgfiles)
+            print("Using configuration files: {}".format(cfgfiles))
+            print("Processing mode:",config.get_config_value('processing', 'mode') )
 
         if config.get_config_value('logging', 'file') and config.get_config_value('logging', 'level'):
             LOGGER.setLevel(getattr(logging, config.get_config_value('logging', 'level')))
@@ -301,6 +303,7 @@ class Service(object):
                         response._update_status(WPS_STATUS.SUCCEEDED, '', 100)
 
                     elif wps_request.operation == 'execute':
+                        print("here we are!!!")
                         response = self.execute(
                             wps_request.identifier,
                             wps_request,

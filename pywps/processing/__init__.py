@@ -27,6 +27,8 @@ def Process(process, wps_request, wps_response):
 
     :return: instance of :class:`pywps.processing.Processing`
     """
+
+    print("--->Process")
     mode = config.get_config_value("processing", "mode")
     LOGGER.info("Processing mode: {}".format(mode))
     if mode == SCHEDULER:
